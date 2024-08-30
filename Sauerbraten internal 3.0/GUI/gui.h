@@ -6,4 +6,7 @@ namespace GUI {
 
 	inline HWND hwnd = FindWindow(nullptr, L"Cube 2: Sauerbraten");
 	inline bool isActive = false;
+
+	void init();
+	void destroy();
 }

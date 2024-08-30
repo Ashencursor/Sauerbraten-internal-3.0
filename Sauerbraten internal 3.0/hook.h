@@ -7,7 +7,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl2.h"
 
-/*
+
 namespace Hook
 {
 	// Variables
@@ -16,7 +16,7 @@ namespace Hook
 		reinterpret_cast<uintptr_t>(GetProcAddress(Opengl, "wglSwapBuffers"));
 
 	// Functions for hooking
-	void Hook();
+	void hook();
 	void unHook();
 	BOOL WINAPI DetourwglSwapBuffers(HDC hdc);
-}*/
+}
