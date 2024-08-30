@@ -15,6 +15,9 @@ namespace Hook
 	inline const auto swapBuffersPtr =
 		reinterpret_cast<uintptr_t>(GetProcAddress(Opengl, "wglSwapBuffers"));
 
+	inline bool UnInject = false;
+
+
 	// Functions for hooking
 	void hook();
 	void unHook();

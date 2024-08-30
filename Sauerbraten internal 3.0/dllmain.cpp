@@ -6,21 +6,25 @@
 
 
 
-
 namespace Hook {
+    //Function pointer for the original wglswapbuffers function in game to store it in
     typedef BOOL(WINAPI* wglSwapBuffers_t)(HDC);
     wglSwapBuffers_t fpwglSwapBuffers = nullptr;
 
     BOOL WINAPI DetourwglSwapBuffers(HDC hdc)//__stdcall
     {
-
+        if (!GUI::init) {
+            std::cout << "Intialized\n";
+            GUI::initialize();
+            GUI::init = true;
+        }
         std::cout << "hooked\n";
         if (GUI::isActive) {
             if (GUI::hwnd)
             {
-                std::cout << "Rendering\n";
+                std::cout << "NewFrame\n";
                 // Start the ImGui frame
-                ImGui_ImplOpenGL2_NewFrame();
+                ImGui_ImplOpenGL3_NewFrame();
                 ImGui_ImplWin32_NewFrame();
                 ImGui::NewFrame();
 
@@ -29,8 +33,13 @@ namespace Hook {
 
                 // Rendering
                 ImGui::Render();
-                ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             }
+        }
+        if (Hook::UnInject) {
+            std::cout << "Destorying\n";
+            //Cleanup imgui
+            GUI::destroy();
         }
         // Call the original wglSwapBuffers function
         return fpwglSwapBuffers(hdc);
@@ -62,11 +71,9 @@ namespace Hook {
 
     void unHook()
     {
+        std::cout << "UnHooking\n";
         // Disable the hook
         MH_DisableHook(reinterpret_cast<LPVOID>(Hook::swapBuffersPtr));
-
-
-
         // Uninitialize MinHook
         MH_Uninitialize();
     }
@@ -80,8 +87,7 @@ BOOL WINAPI Thread(HMODULE hModule) {
     FILE* f;
     freopen_s(&f, "CONOUT$", "w", stdout); // Redirect stdout to the console
 
-    //Init GUI
-    GUI::init();
+    // Get game window handle
     GUI::hwnd = FindWindow(nullptr, L"Cube 2: Sauerbraten");
 
     Hook::hook();
@@ -93,15 +99,15 @@ BOOL WINAPI Thread(HMODULE hModule) {
             GUI::isActive = !GUI::isActive;
         }
 
-
         if (GetAsyncKeyState(VK_DELETE) & 1) {
-            return 0;
+            break;
         }
     }
+    //Once out of loop wglswapbuffers is still hooked so it'll call it and then destroy imgui set FinishedHook to true
+    Hook::UnInject = true;
+
     //UnHook
     Hook::unHook();
-    //Cleanup imgui
-    GUI::destroy();
 
     fclose(f);//what
     FreeConsole();//Detach thread from process

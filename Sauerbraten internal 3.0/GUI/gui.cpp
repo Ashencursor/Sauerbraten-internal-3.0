@@ -6,13 +6,15 @@
 
 void GUI::Render()
 {
+    std::cout << "Rendering\n";
+
     ImGui::Begin("Sauerbraten Internal Hack");
     ImGui::SetWindowSize(ImVec2(400, 600));
     ImGui::Text("This is a hooked ImGui window.");
     ImGui::End();
 }
 
-void GUI::init()
+void GUI::initialize()
 {
 
     // Initialize ImGui
@@ -27,13 +29,13 @@ void GUI::init()
     }
     // Initialize ImGui OpenGL and Win32
     ImGui_ImplWin32_Init(GUI::hwnd); 
-    ImGui_ImplOpenGL2_Init(); // Specify your OpenGL version
+    ImGui_ImplOpenGL3_Init(); // Specify your OpenGL version
 
 }
 
 void GUI::destroy()
 {
-    ImGui_ImplOpenGL2_Shutdown();
+    ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 }
