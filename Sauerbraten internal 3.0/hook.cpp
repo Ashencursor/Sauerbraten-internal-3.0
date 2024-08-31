@@ -4,22 +4,31 @@
 #include "GUI/gui.h"
 #include <Windows.h>
 
-/*
 
 namespace Hook {
+
+
+    //Function pointer for the original wglswapbuffers function in game to store it in
     typedef BOOL(WINAPI* wglSwapBuffers_t)(HDC);
     wglSwapBuffers_t fpwglSwapBuffers = nullptr;
 
     BOOL WINAPI DetourwglSwapBuffers(HDC hdc)//__stdcall
     {
+        // Initialize ImGui ONLY ONCE
+        // This initialization MUST be done in the detour function or it will NOT WORK
+        if (!GUI::init) {
+            std::cout << "Intialized\n";
+            GUI::initialize();
+            GUI::init = true;
+        }
 
         std::cout << "hooked\n";
         if (GUI::isActive) {
             if (GUI::hwnd)
             {
-                std::cout << "Rendering\n";
+                std::cout << "NewFrame\n";
                 // Start the ImGui frame
-                ImGui_ImplOpenGL2_NewFrame();
+                ImGui_ImplOpenGL3_NewFrame();
                 ImGui_ImplWin32_NewFrame();
                 ImGui::NewFrame();
 
@@ -28,8 +37,14 @@ namespace Hook {
 
                 // Rendering
                 ImGui::Render();
-                ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             }
+        }
+        // Destroy ImGui in the Detour function as it was Created here
+        if (Hook::UnInject) {
+            std::cout << "Destorying\n";
+            //Cleanup imgui
+            GUI::destroy();
         }
         // Call the original wglSwapBuffers function
         return fpwglSwapBuffers(hdc);
@@ -50,19 +65,22 @@ namespace Hook {
             return;
         }
 
+
         // Enable the hook
-        if (MH_EnableHook(reinterpret_cast<LPVOID>(Hook::swapBuffersPtr)) != MH_OK)
+        if (MH_EnableHook(reinterpret_cast<LPVOID>(MH_ALL_HOOKS)) != MH_OK)
         {
             return;
         }
+
+
     }
 
     void unHook()
     {
+        std::cout << "UnHooking\n";
         // Disable the hook
-        MH_DisableHook(reinterpret_cast<LPVOID>(Hook::swapBuffersPtr));
-
+        MH_DisableHook(reinterpret_cast<LPVOID>(MH_ALL_HOOKS));
         // Uninitialize MinHook
         MH_Uninitialize();
     }
-}*/
+}

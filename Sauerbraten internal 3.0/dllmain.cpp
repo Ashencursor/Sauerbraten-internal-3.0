@@ -3,21 +3,23 @@
 #include "GUI/gui.h"
 
 
-
-
-
 namespace Hook {
+
+
     //Function pointer for the original wglswapbuffers function in game to store it in
     typedef BOOL(WINAPI* wglSwapBuffers_t)(HDC);
     wglSwapBuffers_t fpwglSwapBuffers = nullptr;
 
     BOOL WINAPI DetourwglSwapBuffers(HDC hdc)//__stdcall
     {
+        // Initialize ImGui ONLY ONCE
+        // This initialization MUST be done in the detour function or it will NOT WORK
         if (!GUI::init) {
             std::cout << "Intialized\n";
             GUI::initialize();
             GUI::init = true;
         }
+
         std::cout << "hooked\n";
         if (GUI::isActive) {
             if (GUI::hwnd)
@@ -36,6 +38,7 @@ namespace Hook {
                 ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             }
         }
+        // Destroy ImGui in the Detour function as it was Created here
         if (Hook::UnInject) {
             std::cout << "Destorying\n";
             //Cleanup imgui
@@ -60,8 +63,9 @@ namespace Hook {
             return;
         }
 
+
         // Enable the hook
-        if (MH_EnableHook(reinterpret_cast<LPVOID>(Hook::swapBuffersPtr)) != MH_OK)
+        if (MH_EnableHook(reinterpret_cast<LPVOID>(MH_ALL_HOOKS)) != MH_OK)
         {
             return;
         }
@@ -73,13 +77,11 @@ namespace Hook {
     {
         std::cout << "UnHooking\n";
         // Disable the hook
-        MH_DisableHook(reinterpret_cast<LPVOID>(Hook::swapBuffersPtr));
+        MH_DisableHook(reinterpret_cast<LPVOID>(MH_ALL_HOOKS));
         // Uninitialize MinHook
         MH_Uninitialize();
     }
 }
-
-
 
 BOOL WINAPI Thread(HMODULE hModule) {
     // Attempt to send a message to the console
@@ -89,6 +91,7 @@ BOOL WINAPI Thread(HMODULE hModule) {
 
     // Get game window handle
     GUI::hwnd = FindWindow(nullptr, L"Cube 2: Sauerbraten");
+    
 
     Hook::hook();
   

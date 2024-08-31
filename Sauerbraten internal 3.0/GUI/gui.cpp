@@ -9,7 +9,7 @@ void GUI::Render()
     std::cout << "Rendering\n";
 
     ImGui::Begin("Sauerbraten Internal Hack");
-    ImGui::SetWindowSize(ImVec2(400, 600));
+    ImGui::SetWindowSize(ImVec2(600, 400));
     ImGui::Text("This is a hooked ImGui window.");
     ImGui::End();
 }
