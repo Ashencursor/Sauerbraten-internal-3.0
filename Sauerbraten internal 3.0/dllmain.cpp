@@ -2,13 +2,9 @@
 #include "hook.h"
 #include "GUI/gui.h"
 
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 namespace Hook {
-
-
-    //Function pointer for the original wglswapbuffers function in game to store it in
-    typedef BOOL(WINAPI* wglSwapBuffers_t)(HDC);
-    wglSwapBuffers_t fpwglSwapBuffers = nullptr;
 
     BOOL WINAPI DetourwglSwapBuffers(HDC hdc)//__stdcall
     {
@@ -81,6 +77,18 @@ namespace Hook {
         // Uninitialize MinHook
         MH_Uninitialize();
     }
+
+    LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+
+        if (GUI::isActive) {
+            switch (msg) {
+
+
+            }
+        }
+        // Call OriginalWndProc
+        return CallWindowProcW(oWndProc, hWnd, msg, wParam, lParam);
+    }
 }
 
 BOOL WINAPI Thread(HMODULE hModule) {
@@ -91,7 +99,6 @@ BOOL WINAPI Thread(HMODULE hModule) {
 
     // Get game window handle
     GUI::hwnd = FindWindow(nullptr, L"Cube 2: Sauerbraten");
-    
 
     Hook::hook();
   

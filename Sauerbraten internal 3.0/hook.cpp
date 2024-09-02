@@ -7,11 +7,6 @@
 
 namespace Hook {
 
-
-    //Function pointer for the original wglswapbuffers function in game to store it in
-    typedef BOOL(WINAPI* wglSwapBuffers_t)(HDC);
-    wglSwapBuffers_t fpwglSwapBuffers = nullptr;
-
     BOOL WINAPI DetourwglSwapBuffers(HDC hdc)//__stdcall
     {
         // Initialize ImGui ONLY ONCE
@@ -64,6 +59,7 @@ namespace Hook {
         {
             return;
         }
+
 
 
         // Enable the hook
