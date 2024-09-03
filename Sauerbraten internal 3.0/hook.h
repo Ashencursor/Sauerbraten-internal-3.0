@@ -32,7 +32,7 @@ namespace Hook
 
 
 	// Detour for WNDPROC 
-	LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	LRESULT WINAPI hkWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	// For WNDPROC hook to store original one
 	inline WNDPROC oWndProc;
 

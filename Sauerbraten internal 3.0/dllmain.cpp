@@ -78,16 +78,34 @@ namespace Hook {
         MH_Uninitialize();
     }
 
-    LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    LRESULT WINAPI hkWndProc(HWND hWnd, UINT umsg, WPARAM wParam, LPARAM lParam) {
 
         if (GUI::isActive) {
-            switch (msg) {
+
+            //This will allow things to interact with the imgui menu, so if my cursor from tabbing out of the game closes the menu then it closes
+            if (ImGui_ImplWin32_WndProcHandler(hWnd, umsg, wParam, lParam))
+                return true;
+
+            // Ensure the cursor is visible
+            ShowCursor(TRUE);
+            ImGui::GetIO().MouseDrawCursor = true;
 
 
+
+            // Handle mouse input differently or ignore it for the game
+            if (umsg == WM_MOUSEMOVE || umsg == WM_LBUTTONDOWN || umsg == WM_RBUTTONDOWN) {
+                // Let ImGui handle the mouse input instead of the game
+                return 0; // Return 0 to stop the game from handling the input
             }
         }
+        else {
+            // Hide the cursor when the menu is closed
+            ShowCursor(FALSE);
+            ImGui::GetIO().MouseDrawCursor = false;
+        }
+
         // Call OriginalWndProc
-        return CallWindowProcW(oWndProc, hWnd, msg, wParam, lParam);
+        return CallWindowProcW(oWndProc, hWnd, umsg, wParam, lParam);
     }
 }
 

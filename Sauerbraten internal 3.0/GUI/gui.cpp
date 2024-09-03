@@ -20,7 +20,7 @@ void GUI::Render()
 void GUI::initialize()
 {
     //Init Wndproc for handling inputs from window
-    Hook::oWndProc = (WNDPROC)SetWindowLongPtr(FindWindow(nullptr, L"Cube 2: Sauerbraten"), GWLP_WNDPROC, (LONG_PTR)Hook::WndProc);
+    Hook::oWndProc = (WNDPROC)SetWindowLongPtr(FindWindow(nullptr, L"Cube 2: Sauerbraten"), GWLP_WNDPROC, (LONG_PTR)Hook::hkWndProc);
     // Initialize ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
