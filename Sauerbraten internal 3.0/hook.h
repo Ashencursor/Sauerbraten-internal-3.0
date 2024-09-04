@@ -18,6 +18,9 @@ namespace Hook
 	void hook();
 	void unHook();
 
+
+
+
 	//Detour for wglSwapBuffers
 	BOOL WINAPI DetourwglSwapBuffers(HDC hdc);
 
@@ -29,6 +32,10 @@ namespace Hook
 	const inline auto Opengl = GetModuleHandle(L"opengl32.dll");
 	inline const auto swapBuffersPtr =
 		reinterpret_cast<uintptr_t>(GetProcAddress(Opengl, "wglSwapBuffers"));
+	
+	//Detour for SetRelativeMouseMode
+	typedef int(*SDL_SetRelativeMouseMode_t)(int);
+	inline auto SDL_RelativeMouseModePtr = reinterpret_cast<SDL_SetRelativeMouseMode_t>(GetProcAddress(GetModuleHandle(L"SDL2.dll"), "SDL_SetRelativeMouseMode"));
 
 
 	// Detour for WNDPROC 

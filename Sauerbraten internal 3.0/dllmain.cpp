@@ -59,7 +59,6 @@ namespace Hook {
             return;
         }
 
-
         // Enable the hook
         if (MH_EnableHook(reinterpret_cast<LPVOID>(MH_ALL_HOOKS)) != MH_OK)
         {
@@ -87,9 +86,9 @@ namespace Hook {
                 return true;
 
             // Ensure the cursor is visible
-            ShowCursor(TRUE);
+            //ShowCursor(TRUE);
             ImGui::GetIO().MouseDrawCursor = true;
-
+            Hook::SDL_RelativeMouseModePtr(0);
 
 
             // Handle mouse input differently or ignore it for the game
@@ -100,7 +99,7 @@ namespace Hook {
         }
         else {
             // Hide the cursor when the menu is closed
-            ShowCursor(FALSE);
+            //ShowCursor(FALSE);
             ImGui::GetIO().MouseDrawCursor = false;
         }
 
