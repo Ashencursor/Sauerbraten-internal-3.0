@@ -18,9 +18,6 @@ namespace Hook
 	void hook();
 	void unHook();
 
-
-
-
 	//Detour for wglSwapBuffers
 	BOOL WINAPI DetourwglSwapBuffers(HDC hdc);
 
@@ -41,6 +38,5 @@ namespace Hook
 	// Detour for WNDPROC 
 	LRESULT WINAPI hkWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	// For WNDPROC hook to store original one
-	inline WNDPROC oWndProc;
-
+	inline WNDPROC oWndProc = nullptr;
 }

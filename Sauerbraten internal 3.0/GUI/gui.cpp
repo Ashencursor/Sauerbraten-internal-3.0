@@ -11,6 +11,33 @@ void GUI::Render()
     ImGui::Begin("Sauerbraten Internal Hack");
     ImGui::SetWindowSize(ImVec2(600, 400));
     ImGui::Text("This is a hooked ImGui window.");
+
+    if (ImGui::BeginTabBar("MyTabBar"))
+    {
+        if (ImGui::BeginTabItem("Aimbot"))
+        {
+            ImGui::Text("Aimbot");
+            ImGui::EndTabItem();
+        }
+
+        if (ImGui::BeginTabItem("ESP"))
+        {
+            ImGui::Text("ESP");
+
+            ImGui::EndTabItem();
+        }
+
+        if (ImGui::BeginTabItem("Random"))
+        {
+            ImGui::Text("Random");
+            ImGui::EndTabItem();
+        }
+
+        ImGui::EndTabBar();
+    }
+
+
+
     ImGui::End();
 
 
