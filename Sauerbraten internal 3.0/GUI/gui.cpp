@@ -1,8 +1,6 @@
+#include "../pch.h"
+
 #include "gui.h"
-#include "../imgui/imgui.h"
-#include "../imgui/imgui_impl_win32.h"
-#include "../imgui/imgui_impl_opengl2.h"
-#include "../imgui/imgui_impl_opengl3.h"
 
 void GUI::Render()
 {
@@ -35,19 +33,12 @@ void GUI::Render()
 
         ImGui::EndTabBar();
     }
-
-
-
     ImGui::End();
-
-
 }
 
 //Things to init for the menu
 void GUI::initialize()
 {
-    //Init Wndproc for handling inputs from window
-    Hook::oWndProc = (WNDPROC)SetWindowLongPtr(FindWindow(nullptr, L"Cube 2: Sauerbraten"), GWLP_WNDPROC, (LONG_PTR)Hook::hkWndProc);
     // Initialize ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -70,3 +61,4 @@ void GUI::destroy()
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 }
+

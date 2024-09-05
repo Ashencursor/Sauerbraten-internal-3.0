@@ -1,5 +1,6 @@
 #include "pch.h"
-#include "hook.h"
+#include "Hook/hook.h"
+
 #include "GUI/gui.h"
 
 
@@ -11,12 +12,9 @@ BOOL WINAPI Thread(HMODULE hModule) {
 
     // Get game window handle
     GUI::hwnd = FindWindow(nullptr, L"Cube 2: Sauerbraten");
-
-    Hook::hook();
+    Hook::init();
   
     while (true) {
-
-
         if (GetAsyncKeyState(VK_INSERT) & 1) {
             GUI::isActive = !GUI::isActive;
         }

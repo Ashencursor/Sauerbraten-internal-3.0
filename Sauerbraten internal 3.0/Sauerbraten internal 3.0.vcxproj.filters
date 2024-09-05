@@ -24,7 +24,7 @@
     <ClInclude Include="GUI\gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="hook.h">
+    <ClInclude Include="Hook\hook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
@@ -131,7 +131,16 @@
     <ClCompile Include="GUI\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hook.cpp">
+    <ClCompile Include="Hook\hook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hook\init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hook\wglswapbuffers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hook\WndProc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
